@@ -1,0 +1,29 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle atombook'
+      'command': 'atombook:toggle'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'atombook'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'atombook:toggle'
+        }
+      ]
+    ]
+  }
+]
+'context-menu':
+  '.atombook a': [
+    {'label': 'Add section', 'command': 'atombook:add-file'}
+    {'type': 'separator'}
+    {'label': 'Rename', 'command': 'atombook:rename-file'}
+    {'label': 'Delete', 'command': 'atombook:delete-file'}
+  ]
