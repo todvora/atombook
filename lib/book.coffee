@@ -20,7 +20,7 @@ class Book
         Q.resolve {'title': 'Default', 'path': './', 'lang': 'default'}
     .then (lang) =>
       console.log('articles then')
-      @articles = new Articles(path.join(@projectPath, lang.path , 'SUMMARY.md'))
+      @articles = new Articles(@projectPath, lang.path , 'SUMMARY.md')
       Q.resolve @articles
 
   getLangs: ->
@@ -30,14 +30,18 @@ class Book
     @articles.read()
 
   addChapter: (name, parent) ->
+    newFilePath = @articles.add(name, parent)
     console.log 'Chapter ' + name + ' added to the book'
     @save()
+    Q.resolve newFilePath
 
   deleteChapter: (chapter) ->
-    console.log 'chapter ' + chapter + ' deleted'
+    @articles.delete(chapter);
     @save()
+    # close the opened editor windows?
 
   renameChapter: (newName, chapter) ->
+
     console.log 'chapter new name: ' + newName
     @save()
 
@@ -45,4 +49,4 @@ class Book
     #todo
 
   save: ->
-    console.log(@articles.toMarkdown())
+    @articles.save()

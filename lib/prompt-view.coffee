@@ -12,4 +12,5 @@ class Prompt extends Dialog
       @callback value
       @close()
     catch error
+      console.log(error)
       @showError("#{error.message}.")

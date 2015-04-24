@@ -15,7 +15,17 @@ class AtombookView
     @element.remove()
 
   getSelectedContextMenuItem: ->
-    @selectedContextMenuItem
+    if @selectedContextMenuItem
+
+      ret = {
+        path : @selectedContextMenuItem.getAttribute 'data-path'
+        name : @selectedContextMenuItem.getAttribute 'data-name'
+        level : @selectedContextMenuItem.getAttribute 'data-level'
+      }
+      @selectedContextMenuItem = null
+      return ret
+    else
+      null
 
   getElement: ->
     @element

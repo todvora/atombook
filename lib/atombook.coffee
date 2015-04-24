@@ -68,8 +68,18 @@ module.exports = GitbookAtom =
 
   addFile: ->
     PromptView = require './prompt-view'
-    # @atombookView.getSelectedContextMenuItem()
-    prompt = new PromptView('Enter a title for the new section', (val) => @book.addChapter(val, ''))
+    parent = @atombookView.getSelectedContextMenuItem()
+    prompt = new PromptView('Enter a title for the new section', (name) =>
+      @book.addChapter(name, parent)
+      .then (newFileName) =>
+        @book.getChapters()
+        .then (summary) =>
+          @updatePanel summary
+        .then () =>
+          atom.workspace.open(newFileName)
+        .done()
+
+    )
     prompt.attach()
 
   renameFile: ->
@@ -79,11 +89,15 @@ module.exports = GitbookAtom =
       prompt.attach()
 
   deleteFile: ->
-    name = @atombookView.getSelectedContextMenuItem().getAttribute('data-name')
+    chapter = @atombookView.getSelectedContextMenuItem()
+
     atom.confirm
       message: "Are you sure you want to delete the selected chapter"
-      detailedMessage: 'You are deleting: ' + name
+      detailedMessage: 'You are deleting: ' + chapter.name
       buttons:
         "Move to Trash": =>
-          @book.deleteChapter(name)
+          @book.deleteChapter(chapter)
+          .then (chapters) =>
+            @updatePanel chapters
+          .done()
         "Cancel": null
